@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#voice input
+sox -t pulseaudio default ./recording.wav silence 1 0.1 10% 1 1.5 10%
+
+#voice to text
+vosk-transcriber -i recording.wav -o input.txt 1> /dev/null 2>&1
+input=$(cat ./input.txt)
+echo $input
+echo "---"
+#input in ollama
+output="$(ollama run dolphin-phi "Anser in less then 100 words, "$input"")"
+
+# output to speechh
+echo $output | ./piper/piper --model en_US-amy-medium.onnx --output_file output.wav 1> /dev/null 2>&1
+
+echo $output
+play output.wav 1> /dev/null 2>&1
+
+# removing files
+rm recording.wav input.txt output.wav
+
