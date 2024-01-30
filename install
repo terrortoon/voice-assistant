@@ -1,0 +1,9 @@
+#!/bin/bash
+
+apt install -y python3
+
+pip3 install vosk srt 
+
+curl https://ollama.ai/install.sh | sh
+
+ollama pull llama2-uncensored
